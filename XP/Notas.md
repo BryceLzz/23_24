@@ -16,3 +16,5 @@
 ###Tareas condicionadas por el tiempo o el esfuerzo
 * CE - E
 * CT - T
+
+Proyect calcula mál el tiempo ya que recursos que trabajan a menos del 100% los cuenta como si trabajaran al 100%.
