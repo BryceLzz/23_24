@@ -7,7 +7,7 @@ void main() {
 	v = (int*) malloc (10*sizeof(int));
 	
 	for (i=0;i<=10;i++)
-		v[i=i*2;
+		v[i]=i*2;
 		
 	for(i=0;i<10;i++) printf("%d", v[i]);
 }
