@@ -1,1 +1,0 @@
-void funcion2(void);
