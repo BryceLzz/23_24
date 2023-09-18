@@ -1,55 +1,39 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 #include <string.h>
+#include <time.h>
 
+void imprimirHoraFecha(const char* opcion) {
+    time_t tiempo;
+    struct tm *tm_info;
+    char buffer[100];
 
-void func_date() {
-    	int day, month, year;
- 
-    	time_t now;
+    time(&tiempo);
+    tm_info = localtime(&tiempo);
 
-    	struct tm *local = localtime(&now);
- 
-    	day = local->tm_mday;        
-    	month = local->tm_mon + 1; 
-    	year = local->tm_year + 1900;  
- 	
-   	 printf("Date is: %02d/%02d/%d\n", day, month, year);
-
+    if (strcmp(opcion, "time") == 0) {
+        strftime(buffer, sizeof(buffer), "%H:%M:%S", tm_info);
+        printf("Hora actual: %s\n", buffer);
+    } else if (strcmp(opcion, "date") == 0) {
+        strftime(buffer, sizeof(buffer), "%Y-%m-%d", tm_info);
+        printf("Fecha actual: %s\n", buffer);
+    } else {
+        printf("Opción no válida. Usa 'time' para la hora o 'date' para la fecha.\n");
+    }
 }
 
-void func_time() {
-	int hours, minutes, seconds;
+int main() {
+    char opcion[20];
 
-    	time_t now;
- 
-    	struct tm *local = localtime(&now);
- 
-    	hours = local->tm_hour;      
-    	minutes = local->tm_min;      
-    	seconds = local->tm_sec;        
- 
-    	if (hours < 12) {
-        	printf("Time is %02d:%02d:%02d am\n", hours, minutes, seconds);
-    	}
-    	else {
-        	printf("Time is %02d:%02d:%02d pm\n", hours - 12, minutes, seconds);
-    	}
+    printf("Selecciona una opción ('time' para hora, 'date' para fecha): ");
+    fgets(opcion, sizeof(opcion), stdin);
+
+    // Elimina el carácter de nueva línea ('\n') si está presente
+    if (opcion[strlen(opcion) - 1] == '\n') {
+        opcion[strlen(opcion) - 1] = '\0';
+    }
+
+    imprimirHoraFecha(opcion);
+
+    return 0;
 }
 
-char* leerEntrada() {
-	char line[21];
-	gets(line);
-	return line;
-}
-
-void main() {
-	char option[21];
-	strcpy(leerEntrada, option);
-	
-	if(strcmp(option, "date") == 0) {
-		func_date();
-	} else func_time();
-	
-}
