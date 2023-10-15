@@ -63,7 +63,7 @@ x + y;;
 
 
 (*let x = x + y in let y = x * y in x + y + z;;*)
-(function x -> (function y -> x + y + z) x * y) x + y;;
+(function x -> (function y -> x + y + z) (x * y)) (x + y);;
 (*- : int = 24*)
 
 
