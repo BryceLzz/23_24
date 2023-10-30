@@ -1,0 +1,46 @@
+from model import TheCocktailDBAPI
+import requests
+import gettext
+import locale
+
+# Configurar el directorio de traducciones
+locale_dir = 'locales'
+gettext.bindtextdomain('CocktailApp', locale_dir)
+gettext.textdomain('CocktailApp')
+lang = locale.getdefaultlocale()[0]
+lang = 'es' if lang.startswith('es') else 'en'
+_ = gettext.gettext
+
+class CocktailController:
+    # Resto del código...
+
+    @staticmethod
+    def check_network_connection():
+        # Resto del código...
+        return response.status_code == 200
+    except requests.exceptions.RequestException:
+        return False
+
+    @staticmethod
+    def perform_search(search_term, search_type):
+        try:
+            if search_type == _("Cóctel"):
+                search_results = TheCocktailDBAPI.search_cocktails(search_term)
+            else:
+                search_results = TheCocktailDBAPI.search_ingredients(search_term)
+
+            return search_results
+        except requests.exceptions.RequestException as e:
+            # Si hay un error de conexión, retorna None
+            return None
+        
+    # Resto del código...
+
+    @staticmethod
+    def fetch_random_cocktail():
+        try:
+            result = TheCocktailDBAPI.get_random_cocktail()
+            return result
+        except requests.exceptions.RequestException as e:
+            # Si hay un error de conexión, retorna None
+            return None

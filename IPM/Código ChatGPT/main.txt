@@ -1,0 +1,22 @@
+import gi
+gi.require_version('Gtk', '4.0')
+from gi.repository import Gtk
+from view import CocktailApp
+
+import gettext
+import locale
+
+# Configurar el directorio de traducciones
+locale_dir = 'locales'
+gettext.bindtextdomain('CocktailApp', locale_dir)
+gettext.textdomain('CocktailApp')
+lang = locale.getdefaultlocale()[0]
+lang = 'es' if lang.startswith('es') else 'en'
+_ = gettext.gettext
+
+def main():
+    app = CocktailApp()
+    app.run(None)
+
+if __name__ == "__main__":
+    main()
