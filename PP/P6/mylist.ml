@@ -1,15 +1,15 @@
 let rec hd = function
   | h :: _ -> h
-  | [] -> failwith "hd: empty list"
+  | [] -> failwith "hd -> lista vacía"
 
 
 let tl = function
   | _ :: t -> t
-  | [] -> failwith "tl: empty list"
+  | [] -> failwith "tl -> lista vacía"
 
 
-let rec length lst =
-  match lst with
+let rec length lista =
+  match lista with
   | [] -> 0
   | _ :: t -> 1 + length t
 
@@ -22,8 +22,8 @@ let rec compare_lengths l1 l2 =
   | (_ :: t1, _ :: t2) -> compare_lengths t1 t2
 
 
-let rec compare_length_with lst n =
-  match (lst, n) with
+let rec compare_length_with lista n =
+  match (lista, n) with
   | ([], 0) -> 0
   | ([], _) -> -1
   | (_ :: t, n') when n' > 0 -> compare_length_with t (n' - 1)
@@ -37,10 +37,10 @@ let rec init n f =
 
 let rec nth lst n =
   match (lst, n) with
-  | ([], _) -> failwith "nth: index out of bounds"
+  | ([], _) -> failwith "nth -> indice fuera del rango"
   | (h :: _, 0) -> h
   | (_ :: t, n') when n' > 0 -> nth t (n' - 1)
-  | (_, _) -> failwith "nth: negative index"
+  | (_, _) -> failwith "nth -> indice negativo"
 
 
 let rec append lst1 lst2 =
@@ -85,7 +85,7 @@ let rec combine lst1 lst2 =
   match (lst1, lst2) with
   | ([], []) -> []
   | (h1 :: t1, h2 :: t2) -> (h1, h2) :: combine t1 t2
-  | (_, _) -> failwith "combine: lists have different lengths"
+  | (_, _) -> failwith "combine -> las listas tienen distintas longitudes"
 
 
 let rec map f lst =
@@ -98,7 +98,7 @@ let rec map2 f lst1 lst2 =
   match (lst1, lst2) with
   | ([], []) -> []
   | (h1 :: t1, h2 :: t2) -> f h1 h2 :: map2 f t1 t2
-  | (_, _) -> failwith "map2: lists have different lengths"
+  | (_, _) -> failwith "map2 -> las listas tienen distintas longitudes"
 
 
 let rec rev_map f lst =
@@ -127,7 +127,7 @@ let rec mem x lst =
 
 let rec find p lst =
   match lst with
-  | [] -> failwith "find: element not found"
+  | [] -> failwith "find -> elemento no encontrado"
   | h :: t -> if p h then h else find p t
 
 
@@ -162,7 +162,7 @@ let rec fold_right f lst acc =
 
 let rec assoc x lst =
   match lst with
-  | [] -> failwith "assoc: element not found"
+  | [] -> failwith "assoc -> elemento no encontrado"
   | (key, value) :: t -> if x = key then value else assoc x t
 
 
