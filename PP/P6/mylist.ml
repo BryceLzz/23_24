@@ -1,10 +1,12 @@
+(* mylist.ml *)
+
 let hd = function
   | h :: _ -> h
-  | [] -> failwith "hd: empty list"
+  | [] -> failwith "hd: lista vacía"
 
 let tl = function
   | _ :: t -> t
-  | [] -> failwith "tl: empty list"
+  | [] -> failwith "tl: lista vacía"
 
 let length lst =
   let rec aux acc l =
@@ -44,10 +46,10 @@ let init n f =
 let nth lst n =
   let rec aux l m =
     match (l, m) with
-    | ([], _) -> failwith "nth: index out of bounds"
+    | ([], _) -> failwith "nth: índice fuera de rango"
     | (h :: _, 0) -> h
     | (_ :: t, n') when n' > 0 -> aux t (n' - 1)
-    | (_, _) -> failwith "nth: negative index"
+    | (_, _) -> failwith "nth: índice negativo"
   in
   aux lst n
 
@@ -104,7 +106,7 @@ let combine lst1 lst2 =
     match (l1, l2) with
     | ([], []) -> rev acc
     | (h1 :: t1, h2 :: t2) -> aux ((h1, h2) :: acc) t1 t2
-    | (_, _) -> failwith "combine: lists have different lengths"
+    | (_, _) -> failwith "combine: las listas tienen longitudes diferentes"
   in
   aux [] lst1 lst2
 
@@ -121,7 +123,7 @@ let map2 f lst1 lst2 =
     match (l1, l2) with
     | ([], []) -> rev acc
     | (h1 :: t1, h2 :: t2) -> aux (f h1 h2 :: acc) t1 t2
-    | (_, _) -> failwith "map2: lists have different lengths"
+    | (_, _) -> failwith "map2: las listas tienen longitudes diferentes"
   in
   aux [] lst1 lst2
 
@@ -160,7 +162,7 @@ let mem x lst =
 let find p lst =
   let rec aux l =
     match l with
-    | [] -> failwith "find: element not found"
+    | [] -> failwith "find: elemento no encontrado"
     | h :: t -> if p h then h else aux t
   in
   aux lst
@@ -202,7 +204,7 @@ let fold_right f lst acc =
 let assoc x lst =
   let rec aux l =
     match l with
-    | [] -> failwith "assoc: element not found"
+    | [] -> failwith "assoc: elemento no encontrado"
     | (key, value) :: t -> if x = key then value else aux t
   in
   aux lst
