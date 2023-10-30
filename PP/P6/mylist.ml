@@ -1,5 +1,3 @@
-(* mylist.ml *)
-
 let hd = function
   | h :: _ -> h
   | [] -> failwith "hd: lista vacía"
