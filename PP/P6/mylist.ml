@@ -1,227 +1,224 @@
-(* mylist.ml *)
-
 let hd = function
   | h :: _ -> h
-  | [] -> failwith "hd -> lista vacia"
+  | [] -> failwith "hd: empty list"
 
 let tl = function
   | _ :: t -> t
-  | [] -> failwith "tl -> lista vacia"
+  | [] -> failwith "tl: empty list"
 
 let length lst =
-  let rec length_aux acc = function
+  let rec aux acc l =
+    match l with
     | [] -> acc
-    | _ :: t -> length_aux (acc + 1) t
+    | _ :: t -> aux (acc + 1) t
   in
-  length_aux 0 lst
+  aux 0 lst
 
 let compare_lengths l1 l2 =
-  let rec compare_lengths_aux l1 l2 =
-    match (l1, l2) with
+  let rec aux lst1 lst2 =
+    match (lst1, lst2) with
     | ([], []) -> 0
     | ([], _) -> -1
     | (_, []) -> 1
-    | (_ :: t1, _ :: t2) -> compare_lengths_aux t1 t2
+    | (_ :: t1, _ :: t2) -> aux t1 t2
   in
-  compare_lengths_aux l1 l2
+  aux l1 l2
 
 let compare_length_with lst n =
-  let rec compare_length_with_aux lst n =
-    match (lst, n) with
+  let rec aux l m =
+    match (l, m) with
     | ([], 0) -> 0
     | ([], _) -> -1
-    | (_ :: t, n') when n' > 0 -> compare_length_with_aux t (n' - 1)
+    | (_ :: t, n') when n' > 0 -> aux t (n' - 1)
     | (_, _) -> 1
   in
-  compare_length_with_aux lst n
+  aux lst n
 
 let init n f =
-  let rec init_aux acc i =
-    if i < 0 then acc
-    else init_aux (f i :: acc) (i - 1)
+  let rec aux acc m =
+    if m <= 0 then acc
+    else aux (f (m - 1) :: acc) (m - 1)
   in
-  init_aux [] (n - 1)
+  aux [] n
 
 let nth lst n =
-  let rec nth_aux lst n =
-    match (lst, n) with
-    | ([], _) -> failwith "nth -> indice fuera de rango"
+  let rec aux l m =
+    match (l, m) with
+    | ([], _) -> failwith "nth: index out of bounds"
     | (h :: _, 0) -> h
-    | (_ :: t, n') when n' > 0 -> nth_aux t (n' - 1)
-    | (_, _) -> failwith "nth -> indice negativo"
+    | (_ :: t, n') when n' > 0 -> aux t (n' - 1)
+    | (_, _) -> failwith "nth: negative index"
   in
-  nth_aux lst n
+  aux lst n
 
 let append lst1 lst2 =
-  let rec append_aux acc lst =
-    match lst with
-    | [] -> acc
-    | h :: t -> append_aux (h :: acc) t
+  let rec aux l1 l2 =
+    match l1 with
+    | [] -> l2
+    | h :: t -> h :: aux t l2
   in
-  append_aux lst2 (rev_append [] lst1)
+  aux lst1 lst2
 
 let rev_append lst1 lst2 =
-  let rec rev_append_aux acc lst =
-    match lst with
-    | [] -> acc
-    | h :: t -> rev_append_aux (h :: acc) t
+  let rec aux l1 l2 =
+    match l1 with
+    | [] -> l2
+    | h :: t -> aux t (h :: l2)
   in
-  rev_append_aux lst2 lst1
+  aux lst1 lst2
 
 let rev lst =
-  let rec rev_aux acc lst =
-    match lst with
+  let rec aux acc l =
+    match l with
     | [] -> acc
-    | h :: t -> rev_aux (h :: acc) t
+    | h :: t -> aux (h :: acc) t
   in
-  rev_aux [] lst
+  aux [] lst
 
 let concat lst =
-  let rec concat_aux acc lst =
-    match lst with
+  let rec aux acc l =
+    match l with
     | [] -> acc
-    | h :: t -> concat_aux (append h acc) t
+    | h :: t -> aux (append acc h) t
   in
-  concat_aux [] (rev lst)
+  aux [] lst
 
 let flatten lst =
-  let rec flatten_aux acc lst =
-    match lst with
+  let rec aux acc l =
+    match l with
     | [] -> acc
-    | h :: t -> flatten_aux (append h acc) t
+    | h :: t -> aux (append acc h) t
   in
-  flatten_aux [] (rev lst)
+  aux [] lst
 
 let split lst =
-  let rec split_aux acc1 acc2 lst =
-    match lst with
+  let rec aux acc1 acc2 l =
+    match l with
     | [] -> (rev acc1, rev acc2)
-    | (x, y) :: t -> split_aux (x :: acc1) (y :: acc2) t
+    | (x, y) :: t -> aux (x :: acc1) (y :: acc2) t
   in
-  split_aux [] [] lst
+  aux [] [] lst
 
 let combine lst1 lst2 =
-  let rec combine_aux acc lst1 lst2 =
-    match (lst1, lst2) with
+  let rec aux acc l1 l2 =
+    match (l1, l2) with
     | ([], []) -> rev acc
-    | (h1 :: t1, h2 :: t2) -> combine_aux ((h1, h2) :: acc) t1 t2
-    | (_, _) -> failwith "combine -> las listas tienen diferentes longitudes"
+    | (h1 :: t1, h2 :: t2) -> aux ((h1, h2) :: acc) t1 t2
+    | (_, _) -> failwith "combine: lists have different lengths"
   in
-  combine_aux [] lst1 lst2
+  aux [] lst1 lst2
 
 let map f lst =
-  let rec map_aux acc lst =
-    match lst with
+  let rec aux acc l =
+    match l with
     | [] -> rev acc
-    | h :: t -> map_aux (f h :: acc) t
+    | h :: t -> aux (f h :: acc) t
   in
-  map_aux [] lst
+  aux [] lst
 
 let map2 f lst1 lst2 =
-  let rec map2_aux acc lst1 lst2 =
-    match (lst1, lst2) with
+  let rec aux acc l1 l2 =
+    match (l1, l2) with
     | ([], []) -> rev acc
-    | (h1 :: t1, h2 :: t2) -> map2_aux (f h1 h2 :: acc) t1 t2
-    | (_, _) -> failwith "map2 -> las listas tienen diferentes longitudes"
+    | (h1 :: t1, h2 :: t2) -> aux (f h1 h2 :: acc) t1 t2
+    | (_, _) -> failwith "map2: lists have different lengths"
   in
-  map2_aux [] lst1 lst2
+  aux [] lst1 lst2
 
 let rev_map f lst =
-  let rec rev_map_aux acc lst =
-    match lst with
+  let rec aux acc l =
+    match l with
     | [] -> rev acc
-    | h :: t -> rev_map_aux (f h :: acc) t
+    | h :: t -> aux (f h :: acc) t
   in
-  rev_map_aux [] lst
+  aux [] lst
 
 let for_all p lst =
-  let rec for_all_aux p lst =
-    match lst with
+  let rec aux l =
+    match l with
     | [] -> true
-    | h :: t -> p h && for_all_aux p t
+    | h :: t -> p h && aux t
   in
-  for_all_aux p lst
+  aux lst
 
 let exists p lst =
-  let rec exists_aux p lst =
-    match lst with
+  let rec aux l =
+    match l with
     | [] -> false
-    | h :: t -> p h || exists_aux p t
+    | h :: t -> p h || aux t
   in
-  exists_aux p lst
+  aux lst
 
 let mem x lst =
-  let rec mem_aux x lst =
-    match lst with
+  let rec aux l =
+    match l with
     | [] -> false
-    | h :: t -> x = h || mem_aux x t
+    | h :: t -> x = h || aux t
   in
-  mem_aux x lst
+  aux lst
 
 let find p lst =
-  let rec find_aux p lst =
-    match lst with
-    | [] -> failwith "find -> elemento no encontrado"
-    | h :: t -> if p h then h else find_aux p t
+  let rec aux l =
+    match l with
+    | [] -> failwith "find: element not found"
+    | h :: t -> if p h then h else aux t
   in
-  find_aux p lst
+  aux lst
 
 let filter p lst =
-  let rec filter_aux p lst =
-    match lst with
-    | [] -> rev []
-    | h :: t -> if p h then filter_aux p t else filter_aux p t
+  let rec aux acc l =
+    match l with
+    | [] -> rev acc
+    | h :: t -> if p h then aux (h :: acc) t else aux acc t
   in
-  filter_aux p lst
+  aux [] lst
 
 let find_all p lst = filter p lst
 
 let partition p lst =
-  let rec partition_aux p lst =
-    match lst with
-    | [] -> (rev [], rev [])
-    | h :: t ->
-        let (yes, no) = partition_aux p t in
-        if p h then (h :: yes, no) else (yes, h :: no)
+  let rec aux acc1 acc2 l =
+    match l with
+    | [] -> (rev acc1, rev acc2)
+    | h :: t -> if p h then aux (h :: acc1) acc2 t else aux acc1 (h :: acc2) t
   in
-  partition_aux p lst
+  aux [] [] lst
 
 let fold_left f acc lst =
-  let rec fold_left_aux f acc lst =
-    match lst with
+  let rec aux acc l =
+    match l with
     | [] -> acc
-    | h :: t -> fold_left_aux f (f acc h) t
+    | h :: t -> aux (f acc h) t
   in
-  fold_left_aux f acc lst
+  aux acc lst
 
 let fold_right f lst acc =
-  let rec fold_right_aux f lst acc =
-    match lst with
+  let rec aux l acc =
+    match l with
     | [] -> acc
-    | h :: t -> f h (fold_right_aux f t acc)
+    | h :: t -> f h (aux t acc)
   in
-  fold_right_aux f lst acc
+  aux (rev lst) acc
 
 let assoc x lst =
-  let rec assoc_aux x lst =
-    match lst with
-    | [] -> failwith "assoc -> elemento no encontrado"
-    | (key, value) :: t -> if x = key then value else assoc_aux x t
+  let rec aux l =
+    match l with
+    | [] -> failwith "assoc: element not found"
+    | (key, value) :: t -> if x = key then value else aux t
   in
-  assoc_aux x lst
+  aux lst
 
 let mem_assoc x lst =
-  let rec mem_assoc_aux x lst =
-    match lst with
+  let rec aux l =
+    match l with
     | [] -> false
-    | (key, _) :: t -> x = key || mem_assoc_aux x t
+    | (key, _) :: t -> x = key || aux t
   in
-  mem_assoc_aux x lst
+  aux lst
 
 let remove_assoc x lst =
-  let rec remove_assoc_aux x lst =
-    match lst with
-    | [] -> []
-    | (key, value) :: t -> if x = key then t else (key, value) :: remove_assoc_aux x t
+  let rec aux acc l =
+    match l with
+    | [] -> rev acc
+    | (key, value) :: t -> if x = key then aux acc t else aux ((key, value) :: acc) t
   in
-  remove_assoc_aux x lst
+  aux [] lst
