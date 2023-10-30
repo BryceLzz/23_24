@@ -1,3 +1,6 @@
+let f n = if n mod 2 = 0 then n / 2 else 3 * n + 1
+
+
 let rec orbit n =
   if n <= 1 then string_of_int n
   else string_of_int n ^ ", " ^ orbit (if n mod 2 = 0 then n / 2 else 3 * n + 1)
@@ -14,7 +17,6 @@ let rec top n =
 
 
 let rec length'n'top n =
-  let string_of_int_pair (a, b) = Printf.sprintf "(%d, %d)" a b in
   if n <= 1 then (0, 1)
   else
     let (len, h) = length'n'top (if n mod 2 = 0 then n / 2 else 3 * n + 1) in
