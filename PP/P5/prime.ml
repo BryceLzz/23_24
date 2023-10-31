@@ -12,8 +12,8 @@ let rec next_prime n =
 
 
 (* Función para encontrar el último número primo menor o igual que n *)
-let rec previous_prime_to n =
-  if is_prime n then n else previous_prime_to (n - 1);;
+let rec last_prime_to n =
+  if is_prime n then n else last_prime_to (n - 1);;
 
 
 (* Función is_prime2 más eficiente *)
