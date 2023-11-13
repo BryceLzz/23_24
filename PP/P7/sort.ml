@@ -20,7 +20,7 @@ let bigl = rango 10000
 let insert_t x lst =
   let rec insert_aux a = function
     | [] -> List.rev (x :: a)
-    | h::t -> if x <= h then List.rev_append acc (x :: h :: t)
+    | h::t -> if x <= h then List.rev_append a (x :: h :: t)
               else insert_aux (h :: a) t
   in insert_aux [] lst
 ;;
@@ -127,21 +127,21 @@ let bigl2 = List.rev (rango2 10000) @ rango2 10000
 ;;
 
 let split_t lst =
-  let rec split_aux acc1 acc2 = function
-    | [] -> (List.rev acc1, List.rev acc2)
-    | h1::h2::t -> split_aux (h1::acc1) (h2::acc2) t
-    | [x] -> (List.rev (x::acc1), List.rev acc2)
+  let rec split_aux a1 a2 = function
+    | [] -> (List.rev a1, List.rev a2)
+    | h1::h2::t -> split_aux (h1::a1) (h2::a2) t
+    | [x] -> (List.rev (x::a1), List.rev a2)
   in
   split_aux [] [] lst
 ;;
 
 let merge_t (l1, l2) =
-  let rec merge_aux acc l1 l2 =
+  let rec merge_aux a l1 l2 =
     match l1, l2 with
-    | [], l | l, [] -> List.rev_append acc l
+    | [], l | l, [] -> List.rev_append a l
     | h1::t1, h2::t2 ->
-      if h1 <= h2 then merge_aux (h1::acc) t1 l2
-      else merge_aux (h2::acc) l1 t2
+      if h1 <= h2 then merge_aux (h1::a) t1 l2
+      else merge_aux (h2::a) l1 t2
   in
   merge_aux [] l1 l2
 ;;
