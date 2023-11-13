@@ -1,3 +1,14 @@
+let rec insert x = function
+[] -> [x]
+| h::t -> if x <= h then x :: h :: t
+else h :: insert x t
+
+
+let rec isort = function
+[] -> []
+| h::t -> insert h (isort t)
+
+
 let rec rango n =
   if n <= 0 then []
   else n :: rango (n - 1)
@@ -83,8 +94,30 @@ let _ = assert (msort ld2 = isort ld2)
 let _ = assert (msort lr1 = isort lr1)
 let _ = assert (msort lr2 = isort lr2)
 
+
 let rec rango2 n =
   if n <= 0 then []
-  else n :: range (n - 1)
+  else n :: rango2 (n - 1)
 
-let bigl2 = List.rev (range 10000) @ range 10000
+let bigl2 = List.rev (rango2 10000) @ rango2 10000
+
+
+let split_t lst =
+  let rec split_aux acc1 acc2 = function
+    | [] -> (List.rev acc1, List.rev acc2)
+    | h1::h2::t -> split_aux (h1::acc1) (h2::acc2) t
+    | [x] -> (List.rev (x::acc1), List.rev acc2)
+  in
+  split_aux [] [] lst
+
+
+let merge_t (l1, l2) =
+  let rec merge_aux acc l1 l2 =
+    match l1, l2 with
+    | [], l | l, [] -> List.rev_append acc l
+    | h1::t1, h2::t2 ->
+      if h1 <= h2 then merge_aux (h1::acc) t1 l2
+      else merge_aux (h2::acc) l1 t2
+  in
+  merge_aux [] l1 l2
+
