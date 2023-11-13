@@ -70,6 +70,7 @@ Sys.time () -. t
 ;;
 
 (* Comparando para ver la diferencia de tiempos entre ambas funciones *)
+(* isort es aproximadamente un 25% más rapido que isort_t *)
 let time_lr2_isort = crono isort lr2
 let time_lr2_isort_t = crono isort_t lr2
 ;;
