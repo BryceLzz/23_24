@@ -154,9 +154,8 @@ let rec msort' lst =
     merge_t (msort' l1, msort' l2)
 ;;
 
-let bigl3 = List.init 1000000 (fun x -> x)
+let bigl3 : 'a list = List.init 1000000 (fun x -> x)
 ;;
-
 
 let time_msort' lst = crono msort' lst
 ;;
