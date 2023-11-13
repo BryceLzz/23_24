@@ -63,6 +63,12 @@ let _ = assert (isort lr1 = isort_t lr1)
 let _ = assert (isort lr2 = isort_t lr2)
 
 
+let crono f x =
+let t = Sys.time () in
+let _ = f x in
+Sys.time () -. t
+
+
 (* Comparando para ver la diferencia de tiempos entre ambas funciones *)
 let time_lr2_isort = crono isort lr2
 let time_lr2_isort_t = crono isort_t lr2
@@ -82,6 +88,24 @@ let rec isort_g cmp lst =
   in
   isort_aux [] lst
 ;;
+
+
+let rec split l = match l with
+h1::h2::t -> let t1, t2 = split t
+in h1::t1, h2::t2
+| _ -> l, []
+
+
+let rec merge (l1,l2) = match l1, l2 with
+[], l | l, [] -> l
+| h1::t1, h2::t2 -> if h1 <= h2 then h1 :: merge (t1, l2)
+else h2 :: merge (l1, t2)
+
+
+let rec msort l = match l with
+[] | [_] -> l
+| _ -> let l1, l2 = split l
+in merge (msort l1, msort l2)
 
 
 (*Pruebas para saber si dan el mismo resultado*)
