@@ -1,0 +1,39 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TODO App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="todoApp">
+    <h1>TODO App</h1>
+    <input type="text" id="taskInput" placeholder="Nueva tarea...">
+    <button onclick="addTask()">Añadir tarea</button>
+    <ul id="taskList">
+      <!-- Tarea de ejemplo -->
+      <li>
+        <div>
+          <input type="checkbox" onclick="markCompleted(this)">
+          <span class="bold-text">Tarea de ejemplo</span>
+        </div>
+        <div class="description-box">
+          <p class="short-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <p class="long-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel dapibus justo. Nulla facilisi. Vivamus facilisis diam in orci sollicitudin, vel dapibus leo accumsan. Suspendisse eget ex a elit fringilla dapibus vel eu leo. Quisque fermentum hendrerit mi at tincidunt. Sed sollicitudin mauris eu magna vulputate tristique. Proin eu odio ut tellus commodo facilisis. Integer aliquet, metus vel consectetur feugiat, metus erat fringilla nunc, nec bibendum odio lectus nec leo.</p>
+        </div>
+        <span class="deadline">Fecha límite: 2023-12-31</span>
+        <div class="actions">
+          <button onclick="editTask(this)">Editar</button>
+          <button onclick="deleteTask(this)">Borrar</button>
+        </div>
+      </li>
+      <!-- Fin de la tarea de ejemplo -->
+    </ul>
+    <button onclick="markAllCompleted()">Marcar todas como completadas</button>
+    <p>Tareas activas: <span id="activeTaskCount">0</span></p>
+    <button onclick="deleteCompleted()">Borrar completadas</button>
+  </div>
+</body>
+</html>

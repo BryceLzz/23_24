@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TODO App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="todoApp">
+    <h1>TODO App</h1>
+    <input type="text" id="taskInput" placeholder="Nueva tarea...">
+    <button onclick="addTask()">Añadir tarea</button>
+    <ul id="taskList"></ul>
+    <button onclick="markAllCompleted()">Marcar todas como completadas</button>
+    <p>Tareas activas: <span id="activeTaskCount">0</span></p>
+    <button onclick="deleteCompleted()">Borrar completadas</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
