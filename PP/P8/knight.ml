@@ -1,3 +1,5 @@
+exception Not_found
+
 type position = int * int
 
 let valid_moves m n obstacles pos =
@@ -10,7 +12,6 @@ let valid_moves m n obstacles pos =
     moves
 
 let rec tour m n obstacles ini fin =
-  let exception Not_found in
   let rec explore path visited pos =
     if pos = fin then List.rev path
     else
@@ -24,7 +25,6 @@ let rec tour m n obstacles ini fin =
   explore [ini] [] ini
 
 let rec min_tour m n obstacles ini fin =
-  let exception Not_found in
   let rec explore path visited pos =
     if pos = fin then List.rev path
     else
