@@ -1,3 +1,5 @@
+type position = int * int
+
 let valid_moves m n obstacles pos =
   let moves = [(2, 1); (2, -1); (-2, 1); (-2, -1); (1, 2); (1, -2); (-1, 2); (-1, -2)] in
   List.filter
@@ -6,7 +8,6 @@ let valid_moves m n obstacles pos =
       let nr, nc = r + dr, c + dc in
       nr >= 0 && nr < m && nc >= 0 && nc < n && not (List.mem (nr, nc) obstacles))
     moves
-
 
 let rec tour m n obstacles ini fin =
   let exception Not_found in
@@ -21,7 +22,6 @@ let rec tour m n obstacles ini fin =
           explore (next_pos :: path) (pos :: visited) next_pos
   in
   explore [ini] [] ini
-
 
 let rec min_tour m n obstacles ini fin =
   let exception Not_found in
@@ -43,7 +43,6 @@ let rec min_tour m n obstacles ini fin =
             (List.hd paths) paths
   in
   explore [ini] [] ini
-
 
 let min_tour4D m n obstacles ini fin =
   let adjust_coordinates (r, c) = (r mod m, c mod n) in
