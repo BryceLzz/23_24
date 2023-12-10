@@ -1,3 +1,6 @@
+type 'a bintree = Empty | Node of 'a * 'a bintree * 'a bintree
+
+
 let rec in_order tree =
   match tree with
   | Empty -> []
@@ -22,3 +25,4 @@ let rec qsort ord lst =
   | pivot :: rest ->
       let smaller, larger = List.partition (fun x -> ord x pivot) rest in
       qsort ord larger @ [pivot] @ qsort ord smaller
+
