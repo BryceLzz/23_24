@@ -109,7 +109,23 @@ Plataformas, herramientas para dar soporte a un sistema de calidad en base ISO 9
 	8. Salidas del proceso
 		- Información que se genera el proceso (es influenciado por lo escogido en el apartado 11)
 	9. Mecanismos de control
+		-  Actividades a poner en marcha para asegurarme de que lo que se está haciendo se hace bien
 	10. Procedimiento del control de la documentación del SGC
+		1. Modificación y aprobación
+			- Si surge un cambio:
+				-  De dónde surge
+				-  Quién lo propone
+				-  De qué procedimiento sale
+				-  Si se acepta
+				-  Revisión
+				-  Aceptación
+			- Registro de cambios del documento
+				- Normalmente sobre el manual de calidad o de procedimientos
+				- Nomeclatura de las versiones
+		2. Distribución
+			- Cómo se distribuyen los cambios
+		3. Almacenamiento
+			- Copia maestra que la tiene la dirección y la de la distribución
 	11. Formularios asociados o plantillas asociadas
 		- Formularios asociados: formularios a rellenar que suelen venir de entes externos
 		- Plantillas asociadas: plantillas que hace la propia empresa para que quién ejecute los pasos sepa que hacer
