@@ -317,3 +317,119 @@ Puede ser alguna de estas:
 			
 			ALTER SESSION SET QUERY_REWRITE_ENABLED = { TRUE | FALSE } ;
 	
+---
+# BDA - [INTEGRIDAD](https://campusvirtual.udc.gal/pluginfile.php/1002883/mod_resource/content/0/Integridade.pdf)
+---
+## Introducción
+---
+- Concepto de integridad y elementos para garantizarla
+	- La información almacenada en una BD debe ser
+		- **Correcta**
+		- **Completa**
+	- Para garantizar la integridad:
+		- **SGBD transaccional**: permite que la BD pase de un estado consistente a otro estado consistente cuando acabe la transacción. Durante la ejecución es posible que no se cumpla alguna regla
+		- **Restricciones de integridad**: son condiciones duraderas sobre los datos, especificadas de forma delcarativa
+		- BD Activa (**triggers** o disparadores): código programado que se ejecuta en el servidor como respuesta a una evento que se produce en la BD. Se utilizan normalmente cuando el SGBD no es capaz de garantizar determinada condición mediante restricciones
+- Fases del diseño de la BD
+	1. Modelo conceptual (ER)
+		- Diagrama ER: Idenficadores, cardinalidad y participación de los tipos de relación
+		- Documentación adicional: condiciones que no podemos dibujar en el ER
+	2. Modelo lógico (relacional)
+		- Claves primarias, foráneas...
+	3. Implementación física (SQL)
+		- Restricciones de integridad
+		- Triggers si son necesarios
+- Tipos de condiciones de integridad (modelo físico)
+	- Valores requeridos: admisión o no de nulos en un atributo
+	- Valores únicos
+	- Integridad de entidad y clave: la clave primaria y las candidatas no deben admitir nulos ni duplicados
+	- Integridad referencial: claves foráneas
+	- Validez de los datos
+		- Un atributo
+		- Una fila
+		- Un dominio
+	- Otras condiciones
+		- Condiciones que afectan a colecciones de filas y/o tablas
+		- Reglas de negocio o condiciones más complejas establecidas en el minimundo o en la organización
+
+## Restricciones en el modelo de datos
+---
+- Está todo esquematizado en la presentación de clase
+
+## Restricciones de integridad de SQL
+---
+- Conceptos generales
+	- Se puede crear una restricción:
+		- A nivel de columna (atributo)
+		- A nivel de fila
+	- Además podemos crear o eliminar restricciones
+		- Crear: en el momento de la creación de la tabla
+		- Crear/Eliminar: mediante *alter table {add | drop}*
+	- Toda restricción tiene un nombre, ya sea indicado en la sentencia SQL mediante *CONSTRAINT <nombre>* o asignado por el sistema. Es buena idea darle nombre a las restricciones porque:
+		- Obtenemos ensajes de error más significativos cuando hay una violación de la restricción
+		- Permite una gestión más simple para eliminar o habilitar/deshabilitar una restricción. También para ponerla en modo aplazado/inmediato
+		- Si creamos scripts SQL que, por ejemplo, deshabilitan y habilitan restricciones, es más fácil hacerlos "receptibles" si usamos nombres
+- Clave primaria
+	- No admite nulos ni duplicados
+	- En SQL se especifica con la restricción PRIMARY KEY
+	- Unha tabla sólo puede tener como máximo una clave primaria
+	- Podemos crearla utilizando restricciones sin nombre
+		- De columna
+			
+				CREATE TABLE DEPT(
+				DEPTNO NUMERIC(2)
+				PRIMARY KEY,
+				DNAME ...
+				)
+
+		- De fila
+
+				CREATE TABLE DEPT(
+				DEPTNO NUMERIC(2),
+				DNAME ...,
+				PRIMARY KEY (DEPTNO)
+				)
+
+		- Con un nombre
+
+				CREATE TABLE DEPT(
+				DEPTNO NUMERIC(2)
+				CONSTRAINT pk_dept PRIMARY KEY,
+				DNAME ...
+				)
+
+				
+				CREATE TABLE DEPT(
+				DEPTNO NUMERIC(2),
+				DNAME ...,
+				CONSTRAINT pk_dept PRIMARY KEY (DEPTNO)
+				)
+
+	- Podríamos eliminar restricciones existentes o crearlas nuevas a posteriori
+		
+			ALTER TABLE DEPT DROP CONSTRAINT pk_dept;
+			ALTER TABLE LEAVE ADD CONSTRAINT pk_leave PRIMARY KEY(ENAME, STARTDATE);
+
+- Valores requeridos (*NOT NULL*)
+	- No se puede insertar una fila con un nulo en ese atributo
+	- No se puede actualizar (*update*) a nulo ese atributo
+	- Si forma parte de una clave foránea, no tiene sentido especificar como acción referencial *set null*
+
+			CREATE TABLE EMP(
+			...
+			ENAME VARCHAR(50) NOT NULL,
+			...
+			);
+
+
+			CREATE TABLE EMP(
+			...
+			ENAME VARCHAR(50)
+			CONSTRAINT nn_ename NOT NULL,
+			...
+			)
+
+	- Muchos gestores:
+		- En caso de violar la restricción, no incluyen su nombre en el mensaje.
+		- Almacenan las restricciones en el catálogo como restricciones del tipo *CHECK(campo is not null)*
+		- Requieren modificar la columna asociad para crear/eliminar la restricción a *NOT NULL*
