@@ -1,5 +1,5 @@
 ---
-# BDA [Evaluación](https://guiadocente.udc.es/guia_docent/index.php?centre=614&ensenyament=614G01&assignatura=614G01029&fitxa_apartat=7&any_academic=2023_24&idioma_assig=&any_academic=2023_24)
+# [Evaluación](https://guiadocente.udc.es/guia_docent/index.php?centre=614&ensenyament=614G01&assignatura=614G01029&fitxa_apartat=7&any_academic=2023_24&idioma_assig=&any_academic=2023_24)
 ---
 ## Trabajos tutelados - 30%
 ---
@@ -24,7 +24,7 @@ Puede ser alguna de estas:
 
 ---
 
-# BDA - [Catálogo](https://campusvirtual.udc.gal/pluginfile.php/1002860/mod_resource/content/0/catalogo.pdf)
+# [Catálogo](https://campusvirtual.udc.gal/pluginfile.php/1002860/mod_resource/content/0/catalogo.pdf)
 
 ---
 
@@ -169,7 +169,7 @@ Puede ser alguna de estas:
 
 ---
 
-# BDA - [Vistas](https://campusvirtual.udc.gal/pluginfile.php/1002861/mod_resource/content/0/vistas.pdf)
+# [Vistas](https://campusvirtual.udc.gal/pluginfile.php/1002861/mod_resource/content/0/vistas.pdf)
 
 ---
 
@@ -318,7 +318,7 @@ Puede ser alguna de estas:
 			ALTER SESSION SET QUERY_REWRITE_ENABLED = { TRUE | FALSE } ;
 	
 ---
-# BDA - [INTEGRIDAD](https://campusvirtual.udc.gal/pluginfile.php/1002883/mod_resource/content/0/Integridade.pdf)
+# [Integridad](https://campusvirtual.udc.gal/pluginfile.php/1002883/mod_resource/content/0/Integridade.pdf)
 ---
 ## Introducción
 ---
@@ -433,3 +433,262 @@ Puede ser alguna de estas:
 		- En caso de violar la restricción, no incluyen su nombre en el mensaje.
 		- Almacenan las restricciones en el catálogo como restricciones del tipo *CHECK(campo is not null)*
 		- Requieren modificar la columna asociad para crear/eliminar la restricción a *NOT NULL*
+
+---
+# [Seguridad](https://campusvirtual.udc.gal/pluginfile.php/1002884/mod_resource/content/0/Seguridade.pdf)
+---
+
+## Introducción
+---
+- Se centra en garantizar:
+	- **Confidencialidad**: datos privados que deben estar protegidos ante accesos no autorizados
+	- **Disponibilidad**: no se deben producir denegaciones de acceso a datos sobre los que hay derechos de acceso
+	- **Integridad**: no se deben producir modificaciones no adecuadas ni daños en la info
+- Se verá influenciada por:
+	- Legislación vigente (LOPD y RXPD)
+	- Normas específicas de la organización
+- **ISO/IEC 27001**: estándar que permite establecer los requisitos para crear, mantener y mejorar un SGSI de una organización. Está basada normalmente en el ciclo de Deming o PDCA (Plan-Do-Check-Act)
+	- **Plan**: establecer objetivos y procesos y hacer una planificación temporal
+	- **Do**: implementarlos
+	- **Check**: verificar el éxito o fracaso
+	- **Act**: recopilar lo aprendido y ponerlo en marcha
+- **Seguridad** protege al SGBD de **amenazas** y **ataques** que pueden producir una pérdida de confidencialidad, disponibilidad e integridad. **Medidas** para contrarrestar riesgos:
+	- Control de acceso: autenticación y autorización
+	- Control de Acceso Obligatorio
+	- Control de Acceso Discrecional
+	- Otras medidas:
+		- BD estatísticas
+		- Cifrado de datos
+		- Auditoría
+		- ...
+
+## Autenticación y autorización
+---
+- Authorization identifier (**AuthID**)
+	- Identificador o nombre de usuario
+		- Identificador SQL para conectarse a la BD
+		- No hay un estándar
+
+				CREATE USER "nombre.usuario" IDENTIFIED BY "contra..señal"";
+				CREATE USER usuario IDENTIFIED EXTERNALLY;
+
+
+	- Nombre de un rol
+	- *PUBLIC* es un pseudo-AuthID que referencia la totalidad de los AuthIDs de la BD
+- **Autenticación**: primer proceso que realiza e SGBD para realizar el control de acceso de los usuarios a la base de datos. Consiste en identificar a un usuario y verificar su identidad. Implica:
+	- Identificarse
+	- Verificarse
+		- Realizada completamente por el SGBD
+		- Delegando en el SO
+		- Delegando en otro sistema externo
+- **Autorización**: especifica lo que un usuario puede hacer en la BD. Hay 2 tipos de mecanismos de control de acceso:
+	- Control de Acceso Obligatorio (MAC)
+		- El estándar SQL no incluye soporte
+		- El nombre puede ser engañoso ya que no es el más habitual
+		- Está basado en políticas a nivel de sistema
+			- A cada objeto de la BD se le asigna una clase de seguridad
+			- A cada usuario se le asigna un nivel de autorización para cada clase
+		- Trata de garantizar que los datos confidenciales no pasen de un usuario sin saber su nivel de seguridad
+	- Control de Acceso Discrecional (DAC)
+		- Está definido en el estándar
+		- Está basado en la concesión y revocación de privilegios: *GRANT* y *REVOKE*
+		- Normalmente incluye la autorización basada en roles
+		
+## Control de acceso discrecional
+---
+- **Privilegios de sistema o de servidor**
+	- Especifican acciones que un usuario puede llevar a cabo sin estar vinculadas a ningún objeto en concreto
+	- No está definido en SQL estándar pero prácticamente todos los SGBD lo incluyen
+	- Normalmente la gestión es sintacticamente igual a la gestión de roles
+
+			CREATE TABLE 				→ Crear tablas en el esquema propio
+			CREATE ANY TABLE 			→ Crear tablas en calquera esquema
+			SELECT ANY 					→ Seleccionar datos de cualquier tabla calquera esquema
+			AUDIT ANY 					→ Auditar cualquier objeto del sistema
+			CREATE MATERIALIZED VIEW	→ Crear vistas materializadas en el esquema propio
+- **Privilegios a nivel de objeto**
+	- Están asociados a un objeto en concreto y dependerán del tipo de este
+	- Están definidos en el estándar
+	- Para tablas y vistas
+	
+			SELECT [<lista de columnas>]
+			INSERT [<lista de columnas>]
+			DELETE
+			UPDATE [<lista de columnas>]
+			REFERENCES [<lista de columnas>]
+			TRIGGER [<lista de columnas>]
+	- Existen otros como *USAGE* o *EXECUTE*
+	- El creador de un objeto tiene todos los privilegios sobre este y la potestad de pasar estos a otros
+	- **Concesión**
+		
+			GRANT { <lista_privilegios> | ALL PRIVILEGES }
+				ON <objeto>
+				TO <lista_authids>
+				[WITH GRANT OPTION]
+		- Un usuario sólo puede conceder un privilegio sobre el objeto si tiene ese privilegio
+		- *GRANT* permite conceder varios privilegios a la vez pero sobre un único objeto
+		- *ALL PRIVILEGES* es la lista de todos los privilegios aplicables al tipo de objeto implicado
+		- *WITH GRANT OPTION* concede la potestad de pasar privilegios
+	- **Revocación**
+
+			REVOKE [GRANT OPTION FOR] { <lista_privilegios> | ALL PRIVILEGES }
+				ON <objeto>
+				FROM <lista_authids>
+				{ CASCADE | RESTRICT }
+		- Un usuario sólo puede revocar un privilegio que concedió explícitamente con una sentencia *GRANT* previa
+		- *GRANT OPTION FOR* sólo se retira la potestad de pasar privilegios
+		- Si algún usuario de la list_authids propagó algún privilegio a otros
+			- *CASCADE* retira el privilegio a todos
+			- *RESTRICT* produce un error y no revoca los privilegios
+- Líneas y cadenas de concesión de privilegios
+	- Al ejecutar una sentencia *GRANT* concediendo un privilegio a un AuthID se establece una línea de concesión. Si se propaga a terceros, se crean complejas cadenas de concesión. Un AuthId pierde un privilegio si se le retira por todas las líneas de concesión
+- Un **rol** es un tipo especial de AuthID que se utiliza para facilitar la gestión de los privilegios	
+	- Es un AuthID que no puede conectarse a BD
+	- Podemos concederle privilegios o otros roles
+	- Podemos asignar el rol a otros AuthIDs con lo que pasan a tener privilegios del rol concedido
+
+			GRANT <rol> [, <rol>, ... ]
+				TO <lista_authids>
+				[WITH ADMIN OPTION]
+
+			REVOKE [ADMIN OPTION FOR] <rol> [, <rol>, ... ]
+				FROM <lista_authids>
+
+## Caso particular: Oracle
+---
+- Sigue razonablemente bien el estándar pero:
+	- Incluye permisos adicionales para diversos tipos de objeto
+		- *ALTER*
+		- *AUDIT*
+		- *INDEX*
+		- ...
+	- La palabra *PRIVILEGES* es opvional despues de *ALL* en una sentencia *GRANT*
+
+			GRANT { <lista_privilexios> | ALL [PRIVILEGES] }
+				ON <obxecto>
+				TO <lista_authids>
+				[WITH GRANT OPTION]
+	- *REVOKE* no incluye *CASCADE* o *RESTRICT* para definir el comportamiento en el caso de que los privilegios se propagaran a terceros.
+		- Oracle actúa en cascada
+		- No permite revocar sólo la potestad de pasar privilegios, se debe eliminar por completo el privilegio
+		
+				REVOKE { <lista_privilexios> | ALL [PRIVILEGES] }
+					ON <obxecto>
+					FROM <lista_authids>
+- Emplea privilegios de sistema y roles
+	- Privilegios del sistema
+
+			CREATE TABLE 		→ Crear tablas en el esquema propio
+			CREATE ANY TABLE 	→ Crear tablas en cualquier esquema
+			CREATE USER 		→ Crear usuarios
+			DELETE ANY TABLE 	→ Borrar filas de cualquier tabla
+			CREATE TABLESPACE 	→ Crear un espacio para tablas
+			→ Todos los privilegios de sistema en SYSTEM_PRIVILEGE_MAP
+
+	- Roles predeterminados
+
+			CONNECT		→ Conectarse (privilegio CREATE SESSION)
+			RESOURCE	→ Crear elementos (tablas, vistas, ... en el esquema propio
+			DBA 		→ Tareas de DBA (Administrador da Base de Datos) desde "dentro":
+						→ Xestiona usuarios, tablas, ... pero no puede por ejemplo montar la BD
+			AUDIT_ADMIN → Configurar la auditoría del sistema
+	- La concesión y revocación de roles sigue el estándar, pero no permite revocar sólo a *ADMIN OPTION FOR*, debe revocarse un rol o privilegio por completo:
+
+			GRANT { <privilegio_sistema> | <rol> }, ...
+				TO <lista_authids>
+				[WITH ADMIN OPTION]
+
+			REVOKE { <privilegio_sistema> | <rol> }, ...
+				FROM <lista_authids>
+	- Crear usuarios no basta para que tengan acceso a la BD
+	- Los privilegios asociados a un rol no se asignan hasta que el usuario activa ese rol
+	- Revocar un rol no hace que el usuario pierda inmediatamente los privilegios asociados
+	- Los privilegios tienen un efecto limitado
+	- Oracle evita la inferencia de información sobre elementos sobre los que no tiene privilegios
+- No sigue el estándar SQL en cuanto al catálogo. Vistas principales:
+	- Globales
+	- Privilegios sobre objetos
+	- Privilegios del sistema
+	- Sobre roles
+
+## Técnicas adicionales
+---
+- **Vistas** (+ control de acceso discrecional)
+	- Problemas:
+		- Es habitual limitar el acceso a ciertas filas o columnas de una tabla
+		- No siempre es posible dar los permisos directamente sobre la tabla
+	- Solución:
+		- Retirar los privilegios sobre una tabla
+		- Crear una vista con la consulta deseada
+			- Vista vertical: todas las filas pero parte de las columnas
+			- Vista horizontal: todas las columnas pero parte de las filas
+		- Dar ejemplos sobre la vista
+- **Bases de datos estadísticas**
+	- Contienen datos individuales pero sólo publica datos agregados
+	- Es una forma de "anonimizar" y no publicar info confidencial
+	- Posible problema: la inferencia de datos confidenciales a partir de los agregados
+	- Habitualmente no se publicarán datos si no provienen de un cierto nº mínimo de tuplas
+- **Cifrado de la información**
+	- Se puede cifrar el SGBD o los datos de la BD
+	- Se usan habitualmente SSL/TLS y certificados
+	- Se puede proteger la info ante accesos externos
+	- Mecanismos
+		- Contraseñas: común cifrar externamente la info y almacenar sólo la clave cifrada
+			- Cifrado unidireccional: HASH, SHA-1, MD5...
+			- En login, se cifra la clave introducida y se compara con la almacenada
+		- Info confidencial: cifrado bidireccional
+			- Paquete *DBMS_CRYPO*
+			- TDE: cifrado de forma transparente desde una columna de una tabla hasta un espacio de tablas completo
+- **Prevención de inyección SQL**
+	- Es un problema de seguridad debido fundamentalmente a no controla de manera correcta la entrada de datos en nuestros programas que acceden a la BD
+	- Una solución es utilizar parámetros
+- **Copias de seguridad** o **backups**
+	- Se puede producir pérdida de info por:
+		- Borrado por parte de un usuario
+		- Mal funcionamiento del sw
+		- Fallo hw de los dispositivos
+- **Auditoría**
+
+## Auditoría
+---
+- Permite **registrar información**:
+	- De los eventos globales del sistema
+	- De las acciones que los usuarios hacen sobre los objetos de la BD
+- El análisis de los logs de auditoría permite detectar:
+	- Accesos o intentos de acceso no autorizados
+	- Abuso en el acceso a datos
+- **Auditoría básica**:
+	- Acceso de usuarios
+	- Uso de privilegios del sistema
+	- Modificaciones del esquema de la BD
+	- Modificaciones de datos sensibles
+- **Es posible auditar**:
+	- Todos los privilegios de sistema
+	- A nivel de cualquier objeto de la BD
+		- Diversas acciones
+			- Select
+			- Delete
+			- Insert
+			- Update
+		- Para intentos con éxito, sin éxito o ambos
+		- A nivel de usuario o global
+- **Oracle audit**
+	- Sentencias DDL, gestión de usuarios...
+	- Sentencias DML: a nivel de tabla
+	- Permite auditar todos los permisos que se pueden dar a un usuario o rol:
+		- Auditoría de sentencias
+		- Auditoría de privilegios
+		- Auditoría de objetos
+	- Podemos comprobar en el catálogo lo que estamos auditando
+- **Triggers de sistema**
+	- Eventos del sistema: arranque-parada de la BD
+	- Conexión/desconexión de usuarios
+	- Modificación del esquema
+- **Triggers de inserción, borrado y eliminación**
+	- Pueden llegar a nivel de fila y columna
+	- Sólo detectan modificaciones
+- Auditoría detallada (**FGA**: Fine Grain Auditing)
+	- Captura accesos de lectura, hasta nivel de fila y columna
+	- Basado en triggers internos
+	- Usa el paquete ***DBMS_FGA***
+	- Define "políticas" de auditoría

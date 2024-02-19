@@ -1,0 +1,4 @@
+C:/Users/User/Desktop/23_24/PRO2/P1/CLion/Plantilla-Template_P1/Plantilla-Template_P1/P1/P1/cmake-build-debug/CMakeFiles/main.dir
+C:/Users/User/Desktop/23_24/PRO2/P1/CLion/Plantilla-Template_P1/Plantilla-Template_P1/P1/P1/cmake-build-debug/CMakeFiles/test_lists.dir
+C:/Users/User/Desktop/23_24/PRO2/P1/CLion/Plantilla-Template_P1/Plantilla-Template_P1/P1/P1/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/User/Desktop/23_24/PRO2/P1/CLion/Plantilla-Template_P1/Plantilla-Template_P1/P1/P1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
